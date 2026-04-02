@@ -172,7 +172,7 @@ if __name__ == "__main__":
     parser.add_argument("--embedding_dim", type=int, default=32)
     parser.add_argument("--hidden_dim", type=int, default=64)
     parser.add_argument("--model_output_dim", type=int, default=12)
-    parser.add_argument("--eval_horizon", type=int, default=12)
+    parser.add_argument("--eval_horizon", type=int, default=6)
     parser.add_argument("--use_encoder_mask", type=int, default=1)
     parser.add_argument("--autoregressive", type=int, default=0)
     parser.add_argument("--num_attn_heads", type=int, default=4)

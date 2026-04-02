@@ -37,7 +37,6 @@ def print_error_metrics(y_true, y_pred, rescaled_y_true, rescaled_y_pred):
     print("Normalized:", {"WAPE": wape, "MAE": mae, "TS": ts, "ERP": erp})
     print("Rescaled:", {"WAPE": rwape, "MAE": rmae, "TS": rts, "ERP": rerp})
 
-
 def run(args):
     print(args)
 
