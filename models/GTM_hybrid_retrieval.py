@@ -29,8 +29,7 @@ class RetrievalMemoryEncoder(nn.Module):
 
 class HybridRetrievalGTM(GTM):
     """
-    GTM augmented with a retrieved analog-sales memory.
-
+    GTM augmented with a retrieved analog-sales memory:
     The decoder attends to both:
     1) Google Trends encoder memory
     2) A retrieved 12-week analog sales curve encoded as a sequence
