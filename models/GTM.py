@@ -294,7 +294,14 @@ class TransformerDecoderLayer(nn.Module):
     def forward(self, tgt, memory, tgt_mask = None, memory_mask = None, tgt_key_padding_mask = None, 
             memory_key_padding_mask = None, **kwargs):
 
-        tgt2, attn_weights = self.multihead_attn(tgt, memory, memory)
+        #tgt2, attn_weights = self.multihead_attn(tgt, memory, memory)
+        tgt2, attn_weights = self.multihead_attn(
+            tgt,
+            memory,
+            memory,
+            attn_mask=memory_mask,
+            key_padding_mask=memory_key_padding_mask,
+        )
         tgt = tgt + self.dropout2(tgt2)
         tgt = self.norm2(tgt)
         tgt2 = self.linear2(self.dropout(self.activation(self.linear1(tgt))))
@@ -428,11 +435,12 @@ class GTM(pl.LightningModule):
             erp_epsilon=0.1,
         )
 
+        scale = 1065.0
         # Rescaled/original-unit metrics
         val_wape, val_mae, val_ts, val_erp = compute_forecast_metrics(
             rescaled_item_sales,
             rescaled_forecasted_sales,
-            erp_epsilon=0.1,
+            erp_epsilon=0.1 * scale,
         )
 
         # Log loss

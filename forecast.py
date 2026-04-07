@@ -29,13 +29,17 @@ def compute_forecast_metrics_np(y_true, y_pred, erp_epsilon=0.1):
 
     return round(wape, 3), round(mae, 3), round(ts, 3), round(erp, 3)
 
-
-def print_error_metrics(y_true, y_pred, rescaled_y_true, rescaled_y_pred):
-    wape, mae, ts, erp = compute_forecast_metrics_np(y_true, y_pred)
-    rwape, rmae, rts, rerp = compute_forecast_metrics_np(rescaled_y_true, rescaled_y_pred)
+def print_error_metrics(y_true, y_pred, rescaled_y_true, rescaled_y_pred, erp_epsilon=0.1):
+    wape, mae, ts, erp = compute_forecast_metrics_np(y_true, y_pred, erp_epsilon=erp_epsilon)
+    rwape, rmae, rts, rerp = compute_forecast_metrics_np(
+        rescaled_y_true,
+        rescaled_y_pred,
+        erp_epsilon=erp_epsilon * 1065.0
+    )
 
     print("Normalized:", {"WAPE": wape, "MAE": mae, "TS": ts, "ERP": erp})
     print("Rescaled:", {"WAPE": rwape, "MAE": rmae, "TS": rts, "ERP": rerp})
+
 
 def run(args):
     print(args)
