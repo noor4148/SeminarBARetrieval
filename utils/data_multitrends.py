@@ -135,8 +135,10 @@ class ZeroShotDataset():
 
     def preprocess_data(self):
         data = self.data_df
-        gtrends, image_paths = [], []
 
+        # Get the Gtrends time series associated with each product
+        # Read the images (extracted image features) as well
+        gtrends, image_paths = [], []
         for (idx, row) in tqdm(data.iterrows(), total=len(data), ascii=True):
             cat, col, fab, fiq_attr, start_date, img_path = row['category'], row['color'], row['fabric'], row['extra'], \
                 row['release_date'], row['image_path']
@@ -150,14 +152,16 @@ class ZeroShotDataset():
             col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
             fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
             multitrends = np.vstack([cat_gtrend, col_gtrend, fab_gtrend])
-
+            # Append them to the lists
             gtrends.append(multitrends)
             image_paths.append(img_path) # Just save the path, not the actual image!
-
+        # Convert to numpy arrays
         gtrends = np.array(gtrends)
 
+        # Remove non-numerical information
         data.drop(['external_code', 'season', 'release_date', 'image_path'], axis=1, inplace=True)
 
+        # Create tensors for each part of the input/output
         item_sales, temporal_features = torch.FloatTensor(data.iloc[:, :12].values), torch.FloatTensor(
             data.iloc[:, 13:17].values)
         categories, colors, fabrics = [self.cat_dict[val] for val in data.iloc[:].category.values], \
@@ -173,7 +177,6 @@ class ZeroShotDataset():
         print('Starting dataset creation process...')
         data_with_gtrends = self.preprocess_data()
         if train:
-            # We can safely use 2 workers now because we aren't duplicating 10GB of RAM!
             return DataLoader(data_with_gtrends, batch_size=batch_size, shuffle=True, num_workers=2)
         else:
             return DataLoader(data_with_gtrends, batch_size=1, shuffle=False, num_workers=2)

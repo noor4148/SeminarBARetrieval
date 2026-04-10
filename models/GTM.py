@@ -115,12 +115,9 @@ class FusionNetwork(nn.Module):
 
         return final
 
-
 class MultimodalProductEncoder(nn.Module):
-    """
-    Image + text encoder used to build the product embedding x_i.
-    This representation excludes temporal features.
-    """
+    # Image + text encoder used to build the product embedding x_i.
+    # This representation excludes temporal features.
 
     def __init__(self, embedding_dim, hidden_dim, use_img, use_text, dropout=0.2):
         super().__init__()
@@ -349,10 +346,8 @@ class GTM(pl.LightningModule):
         return mask
 
     def encode_multimodal_embedding(self, category, color, fabric, images):
-        """
-        Compute x_i using only image and textual metadata.
-        Temporal/release-date features are excluded.
-        """
+        # Compute x_i using only image and textual metadata.
+        # Temporal/release-date features are excluded.
         img_encoding = self.image_encoder(images)
         text_encoding = self.text_encoder(category, color, fabric)
         x_i = self.multimodal_product_encoder(img_encoding, text_encoding)

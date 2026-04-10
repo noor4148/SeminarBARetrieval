@@ -11,7 +11,7 @@ from models.GTM import (
 
 
 class RetrievalMemoryEncoder(nn.Module):
-    """Encode a retrieved 12-week analog curve as an extra decoder memory sequence."""
+    # Encode a retrieved 12-week analog curve as an extra decoder memory sequence.
 
     def __init__(self, hidden_dim, seq_len, num_heads=4):
         super().__init__()
@@ -28,12 +28,10 @@ class RetrievalMemoryEncoder(nn.Module):
 
 
 class HybridRetrievalGTM(GTM):
-    """
-    GTM augmented with a retrieved analog-sales memory:
-    The decoder attends to both:
-    1) Google Trends encoder memory
-    2) A retrieved 12-week analog sales curve encoded as a sequence
-    """
+    # GTM augmented with a retrieved analog-sales memory:
+    # The decoder attends to both:
+    # 1) Google Trends encoder memory
+    # 2) A retrieved 12-week analog sales curve encoded as a sequence
 
     def __init__(
         self,
