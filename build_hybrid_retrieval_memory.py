@@ -277,7 +277,7 @@ if __name__ == "__main__":
     parser.add_argument("--val_frac", type=float, default=0.15)
     parser.add_argument("--horizon_weeks", type=int, default=12)
     parser.add_argument("--top_k", type=int, default=10)
-    parser.add_argument("--min_similarity", type=float, default=0.92)
+    parser.add_argument("--min_similarity", type=float, default=0.95)
 
     parser.add_argument("--use_img", type=int, default=1)
     parser.add_argument("--use_text", type=int, default=1)
