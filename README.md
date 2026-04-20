@@ -1,16 +1,16 @@
 # Retrieval GTM for Zero-Shot Sales Forecasting
 
-This project contains a **zero-shot sales forecasting** pipeline with two variants:
+This project contains a zero-shot sales forecasting pipeline with two variants:
 
-1. **Baseline forecasting** with `GTM`
-2. **Retrieval-augmented forecasting** with `HybridRetrievalGTM`, which adds an extra analog sales curve retrieved from a retrieval memory
+1. Baseline forecasting with `GTM`
+2. Retrieval-augmented forecasting with `HybridRetrievalGTM`, which adds an extra analog sales curve retrieved from a retrieval memory
 
 The code combines multiple modalities:
-- **product metadata** (category, color, fabric)
-- **product images**
-- **Google Trends** time series
-- **temporal features**
-- optionally, a **retrieved analog sales curve** for the extension
+- product metadata (category, color, fabric)
+- product images
+- Google Trends time series
+- temporal features
+- optionally, a retrieved analog sales curve for the extension
 
 ---
 
@@ -97,10 +97,10 @@ The preprocessing expects at least the following columns:
 - temporal feature columns
 
 ### Important: column order matters
-The dataset preprocessing is written in a **positional** way. After dropping
+The dataset preprocessing is written in a positional way. After dropping
 `external_code`, `season`, `release_date`, and `image_path`:
-- the **first 12 columns** are interpreted as sales targets
-- columns **13 through 16** are interpreted as temporal features
+- the first 12 columns are interpreted as sales targets
+- columns 13 through 16 are interpreted as temporal features
 
 Make sure your CSV layout matches this expectation.
 
@@ -118,14 +118,14 @@ These three trends are then normalized independently per product and stacked tog
 
 ### GTM
 `GTM` is a multimodal forecasting model that uses:
-- an **image encoder** (`ResNet50`)
-- a **text encoder** based on `bert-base-uncased`
-- a **dummy / temporal encoder** for day/week/month/year features
-- a **Google Trends encoder** based on a Transformer encoder
-- a **Transformer decoder** for the final forecast
+- an image encoder (`ResNet50`)
+- a text encoder based on `bert-base-uncased`
+- a dummy / temporal encoder for day/week/month/year features
+- a Google Trends encoder based on a Transformer encoder
+- a Transformer decoder for the final forecast
 
 ### HybridRetrievalGTM
-`HybridRetrievalGTM` inherits from `GTM` and adds an extra encoder for a retrieved **analog sales curve**. This retrieved curve is appended as extra decoder memory alongside the Google Trends encoding.
+`HybridRetrievalGTM` inherits from `GTM` and adds an extra encoder for a retrieved analog sales curve. This retrieved curve is appended as extra decoder memory alongside the Google Trends encoding.
 
 ---
 
@@ -147,7 +147,7 @@ python train.py \
 ### What happens during training?
 - `train.csv` is loaded
 - the data is sorted by `release_date`
-- a **time-based split** is created with **85% subtrain / 15% validation**
+- a time-based split is created with 85% subtrain / 15% validation
 - the best checkpoint is saved based on `val_wape`
 - TensorBoard logging is used
 
@@ -206,14 +206,14 @@ python build_hybrid_retrieval_memory.py \
 
 ### What does this script do?
 1. Loads the trained baseline `GTM` model
-2. Extracts a **multimodal embedding** for each product based on image + text
+2. Extracts a multimodal embedding for each product based on image + text
 3. Computes cosine similarity between products
 4. Applies an admissibility mask so that only valid analogs remain
 5. Computes a weighted retrieved sales curve
 
 ### Valid retrieval neighbors must satisfy:
-- the neighbor must come from **subtrain**
-- the neighbor must **not** have the same `external_code`
+- the neighbor must come from subtrain
+- the neighbor must not have the same `external_code`
 - the neighbor must be far enough in the past so that:
 
   `neighbor_release_date + horizon <= query_release_date`
@@ -330,10 +330,10 @@ This `.pth` file contains:
 ## 12. Metrics
 
 The evaluation scripts report both a normalized and a rescaled version of:
-- **WAPE**
-- **MAE**
-- **TS**
-- **ERP**
+- WAPE
+- MAE
+- TS
+- ERP
 
 Rescaling uses `normalization_scale.npy`.
 
